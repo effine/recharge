@@ -1,0 +1,19 @@
+apply plugin: 'java'
+dependencies {  
+    compile 'org.hibernate:hibernate-core:3.6.7.Final'  
+} 
+
+
+task hello {
+  doLast{
+      println "Hello world"
+    }   
+  doFirst{
+      println "I am xxx"
+    } 
+}
+
+
+task word <<  {
+     println " ----> world"
+}
