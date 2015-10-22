@@ -1,4 +1,0 @@
-gradleDemo
-==========
-
-test gradle 
