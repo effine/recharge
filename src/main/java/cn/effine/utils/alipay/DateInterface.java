@@ -14,11 +14,9 @@ import cn.effine.utils.PropertiesUtils;
 
 /**
  * 自定义处理数据接口
- * @author wlc
  *
  */
 public class DateInterface {
-
 	
 		/*------------------------必选-----------------------*/
 		//商户订单号
@@ -59,14 +57,7 @@ public class DateInterface {
 		//非局域网的外网IP地址，如：221.0.0.1
 
 	
-	public String intoParameter(String WIDout_trade_no,String subject,String total_fee,String WIDshow_url){
-	
-		
-		out_trade_no = WIDout_trade_no;
-		WIDtotal_fee = total_fee;
-		WIDsubject = subject;
-		//////////////////////////////////////////////////////////////////////////////////
-		
+	public String intoParameter(String out_trade_no, String subject, String total_fee, String show_url){
 		//把请求参数打包成数组
 		Map<String, String> sParaTemp = new HashMap<String, String>();
 		sParaTemp.put("service", "create_direct_pay_by_user");
@@ -74,20 +65,17 @@ public class DateInterface {
         sParaTemp.put("seller_email", AlipayConfig.seller_email);
         sParaTemp.put("_input_charset", AlipayConfig.input_charset);
 		sParaTemp.put("payment_type", payment_type);
-		//sParaTemp.put("notify_url", notify_url);
+		sParaTemp.put("notify_url", notify_url);
 		sParaTemp.put("return_url", return_url);
 		sParaTemp.put("out_trade_no", out_trade_no);
-		sParaTemp.put("subject", WIDsubject);
-		sParaTemp.put("total_fee", WIDtotal_fee);
-		//sParaTemp.put("body", body);
-		//sParaTemp.put("show_url", show_url);
-		//sParaTemp.put("anti_phishing_key", anti_phishing_key);
-		//sParaTemp.put("exter_invoke_ip", exter_invoke_ip);
+		sParaTemp.put("subject", subject);
+		sParaTemp.put("total_fee", total_fee);
+		sParaTemp.put("body", body);
+		sParaTemp.put("show_url", show_url);
+		sParaTemp.put("anti_phishing_key", anti_phishing_key);
+		sParaTemp.put("exter_invoke_ip", exter_invoke_ip);
 		
 		//建立请求
-		String sHtmlText = AlipaySubmit.buildRequest(sParaTemp,"post","确认");
-		return sHtmlText;
+		return AlipaySubmit.buildRequest(sParaTemp,"post","确认");
 	}
-	
-	
 }

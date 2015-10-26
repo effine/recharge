@@ -31,10 +31,13 @@ public class AlipayController {
 
 	/**
 	 * 调用支付宝
-	 * @param subject 商品名称
-	 * @param total_fee 商品价格  已舍弃，改为从数据库查询计算
-	 * @param crsId 课程id
-	 * @param useBean 是否使用云豆  1 使用  0 不使用
+	 * 
+	 * @param subject
+	 *            商品名称
+	 * @param total_fee
+	 *            商品价格
+	 * @param crsId
+	 *            课程id
 	 */
 	@RequestMapping("aliSubmit")
 	@ResponseBody
