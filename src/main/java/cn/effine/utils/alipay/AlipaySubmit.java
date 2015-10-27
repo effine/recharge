@@ -38,7 +38,7 @@ public class AlipaySubmit {
     /**
      * 支付宝提供给商户的服务接入网关URL(新)
      */
-    private static final String ALIPAY_GATEWAY_NEW = PropertiesUtils.getAlipayValue("ali_geteway_new");
+    private static final String ALIPAY_GATEWAY_NEW = PropertiesUtils.getAlipayValue("geteway_new");
 	
     /**
      * 生成签名结果

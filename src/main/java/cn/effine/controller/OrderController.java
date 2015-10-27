@@ -9,6 +9,7 @@
 package cn.effine.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.effine.utils.Constants;
 import cn.effine.utils.StringCustomUtils;
 import cn.effine.utils.alipay.DateInterface;
 
@@ -43,8 +43,7 @@ public class OrderController {
 		
 		//对接支付宝
 		DateInterface d = new DateInterface();
-		//String message = d.intoParameter(orderNum, subject, total_fee, "");
-		String message = d.intoParameter(ordernum, subject, total_fee, Constants.PAGE_MAP.get("show_url"));
+		String message = d.intoParameter(ordernum, subject, total_fee);
 		System.out.println("调试信息： " + message);
 	}
 	
@@ -57,6 +56,14 @@ public class OrderController {
 	@ResponseBody
 	public String alipayNotify(HttpServletRequest request, HttpServletResponse response) {
 		Map<String,String> params = new HashMap<String,String>();
+		
+		// 测试使用
+		Enumeration<String> names = request.getParameterNames();
+		while(names.hasMoreElements()){
+			String name = names.nextElement();
+			System.out.println("参数名-" + name + ":  "+request.getParameter(name));
+		}
+		
 		// 获取支付宝POST过来反馈信息
 		Map<String, String[]> requestParams = request.getParameterMap();
 		for (Iterator<String> itorator = requestParams.keySet().iterator(); itorator.hasNext();) {
@@ -86,13 +93,12 @@ public class OrderController {
 		}
 
 		// 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表
-//		if(AlipayNotify.verify(params)){
+		// TODO effine 待完成下面的验证
+		//if(AlipayNotify.verify(params)){
 			if(trade_status.equals("TRADE_SUCCESS")){
 					 System.out.println("订单" + out_trade_no + "处理成功");
 				}
-//		}
+		//}
 		return "fail";	
 	}
 }
-
-

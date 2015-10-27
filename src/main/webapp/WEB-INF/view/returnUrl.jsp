@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<dev>支付宝支付完成显示页面showURL</dev>
+	<dev>支付宝returnURL</dev>
 </body>
 </html>
