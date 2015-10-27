@@ -56,14 +56,26 @@ public class DateInterface {
 		String exter_invoke_ip = "";
 		//非局域网的外网IP地址，如：221.0.0.1
 
-	
-	public String intoParameter(String out_trade_no, String subject, String total_fee, String show_url){
-		//把请求参数打包成数组
+	/**
+	 * 初始化参数列表
+	 *
+	 * @param out_trade_no
+	 *            商户订单号
+	 * @param subject
+	 *            商品名称
+	 * @param total_fee
+	 *            商品金额
+	 * @param show_url
+	 *            支付宝支付完成调整的URL
+	 * @return
+	 */
+	public String intoParameter(String out_trade_no, String subject, String total_fee, String show_url) {
+		// 把请求参数打包成数组
 		Map<String, String> sParaTemp = new HashMap<String, String>();
 		sParaTemp.put("service", "create_direct_pay_by_user");
-        sParaTemp.put("partner", AlipayConfig.partner);
-        sParaTemp.put("seller_email", AlipayConfig.seller_email);
-        sParaTemp.put("_input_charset", AlipayConfig.input_charset);
+		sParaTemp.put("partner", AlipayConfig.partner);
+		sParaTemp.put("seller_email", AlipayConfig.seller_email);
+		sParaTemp.put("_input_charset", AlipayConfig.input_charset);
 		sParaTemp.put("payment_type", payment_type);
 		sParaTemp.put("notify_url", notify_url);
 		sParaTemp.put("return_url", return_url);
@@ -74,8 +86,8 @@ public class DateInterface {
 		sParaTemp.put("show_url", show_url);
 		sParaTemp.put("anti_phishing_key", anti_phishing_key);
 		sParaTemp.put("exter_invoke_ip", exter_invoke_ip);
-		
-		//建立请求
-		return AlipaySubmit.buildRequest(sParaTemp,"post","确认");
+
+		// 建立请求
+		return AlipaySubmit.buildRequest(sParaTemp, "post", "确认");
 	}
 }
