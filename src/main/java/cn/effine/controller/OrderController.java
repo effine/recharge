@@ -8,6 +8,7 @@
 
 package cn.effine.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,10 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.effine.utils.Constants;
 import cn.effine.utils.StringCustomUtils;
-import cn.effine.utils.alipay.AlipayNotify;
 import cn.effine.utils.alipay.DateInterface;
 
 @Controller
@@ -35,7 +36,7 @@ public class OrderController {
 	 * @param total_fee
 	 *            商品价格(单位：分)
 	 */
-	@RequestMapping("aliSubmit")
+	@RequestMapping("alipay")
 	public void aliSubmit(HttpServletRequest request, HttpServletResponse response, String subject, String total_fee){
 		// 生成商户订单号
 		String ordernum = StringCustomUtils.getRandomNum(10);
@@ -47,46 +48,50 @@ public class OrderController {
 		System.out.println("调试信息： " + message);
 	}
 	
-	@RequestMapping("callback")
-	public String callback(HttpServletRequest request, HttpServletResponse response){
-		
-		//获取支付宝GET过来反馈信息
+	/**
+	 * 支付宝支付完成的通知请求(回调方法)进行订单状态修改
+	 * 
+	 * @return 字符串状态[success|fail]
+	 */
+	@RequestMapping("notify")
+	@ResponseBody
+	public String alipayNotify(HttpServletRequest request, HttpServletResponse response) {
 		Map<String,String> params = new HashMap<String,String>();
+		// 获取支付宝POST过来反馈信息
 		Map<String, String[]> requestParams = request.getParameterMap();
-		for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {
-			String name = (String) iter.next();
+		for (Iterator<String> itorator = requestParams.keySet().iterator(); itorator.hasNext();) {
+			String name = itorator.next();
 			String[] values = (String[]) requestParams.get(name);
 			String valueStr = "";
 			for (int i = 0; i < values.length; i++) {
-				valueStr = (i == values.length - 1) ? valueStr + values[i]
-						: valueStr + values[i] + ",";
+				valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
+			}
+			//乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化
+			try {
+				valueStr = new String(valueStr.getBytes("ISO-8859-1"), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
 			}
 			params.put(name, valueStr);
 		}
 		
-		//获取支付宝的通知返回参数//
-		//商户订单号 eg 2015080715131704519
-
-		String out_trade_no =request.getParameter("out_trade_no");
-
-		//支付宝交易号 2015080700001000510061511244
-
-		String trade_no = request.getParameter("trade_no");
-
-		//交易状态 TRADE_SUCCESS
-		String trade_status = request.getParameter("trade_status");
-
-		//计算得出通知验证结果 false
-		boolean verify_result = AlipayNotify.verify(params);
+		String out_trade_no = null;	//商户订单号
+		String trade_status = null;	//交易状态
 		
-		if(verify_result){//验证成功
-			if(trade_status.equals("TRADE_FINISHED") || trade_status.equals("TRADE_SUCCESS")){
-				//处理自己的业务逻辑(根据订单号，更新订单支付状态)
-			}
-
+		try {
+			out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
+			trade_status = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
-		// 回调URL
-		return "callback";
+
+		// 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表
+//		if(AlipayNotify.verify(params)){
+			if(trade_status.equals("TRADE_SUCCESS")){
+					 System.out.println("订单" + out_trade_no + "处理成功");
+				}
+//		}
+		return "fail";	
 	}
 }
 
