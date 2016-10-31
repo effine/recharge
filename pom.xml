@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cn.effine</groupId>
-	<artifactId>recharge</artifactId>
-	<version>1.0</version>
+	<artifactId>sun</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>recharge</name>
-	<url>http://www.effine.cn</url>
+	<name>sun</name>
+	<url>http://www.effine.cn/sun</url>
 
 	<properties>
 		<!-- 文件拷贝时的编码 -->
@@ -120,4 +120,5 @@
 		</plugins>
 	</build>
 
+	<description>web admin</description>
 </project>
